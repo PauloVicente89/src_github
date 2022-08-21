@@ -15,30 +15,54 @@ export default function Form() {
     const [branches , setBranches] = useState([]);
     const [commits , setCommit] = useState([]);
 
+
+
+    async function HandlerSearch () {
+        try {
+          const res = await axios.get(`https://api.github.com/users/${user}/repos`)
+         res.data.map((repo) => {
+            setRepositorios(repositorios => [...repositorios, repo.name])
+            GetBranches(repo.name)
+        }) 
+    } catch (error) {
+        console.error(error)
+    }finally{
+    }
+    }
+
+
+    async function GetBranches (nameRepo) {
+        try {
+            const res = await axios.get(`https://api.github.com/repos/${user}/${nameRepo}/branches`,{
+                repo: 'REPO'
+            }).then(res => 
+                res.data.map((branch) => {
+                    setBranches(branches => [...branches,{repositorio: nameRepo, branche:branch.name}])
+                    GetCommit(branch.name, nameRepo)
+                }),
+                )
+            } catch (error) {
+                console.error(error)
+            } 
+    }
+
     
-
-    function HandlerSearch() {
-
-        axios.get(`https://api.github.com/users/${user}/repos`)
-            .then(res =>
-                res.data.map(repo => {
-                   setRepositorios(repositorios => [...repositorios, repo.name])
-
-                   axios.get(`https://api.github.com/repos/${user}/${repo.name}/branches`)
-                    .then(res => 
-                        res.data.map(branch => {
-                            setBranches(branches => [...branches, branch.name])
-                            console.log(branch.name)
-                        })
-                    )
-                    
-                })
-
+    async function GetCommit (nameBranch, repoName) {
+        try {
+            const res = await axios.get(`https://api.github.com/repos/${user}/${repoName}/commits`,{
+                repo: 'REPO'
+            }).then(res => 
+                res.data.map((commit) => {
+                    setCommit(branches => [...branches,
+                        {branch: nameBranch, 
+                        commitMessage:commit.commit.message, 
+                        nomeRepositorio: repoName}])
+                }), 
+                )
                 
-
-            )
-        
-
+            } catch (error) {
+                console.error(error)
+            } 
     }
 
 
@@ -69,15 +93,18 @@ return (
                     (repo) => {
                         {branches.map(
                             (branche) =>
-                            <li>{branche}</li>
+                            {console.log(commits)},
                         )}
                         return(
                             // CRIANDO UMA LI A CADA REPOSITORIO
-                            <li className='nome-repo'>
-                                <button type='button' id='searchBranche'>
-                                    {repo}
-                                </button>
-                            </li>
+                            <>
+                                <li className='nome-repo'>
+                                    <button type='button' id='searchBranche'>
+                                        {repo}
+                                    </button>
+                                </li>
+                            </>
+
                         )
                     }
                 )}
