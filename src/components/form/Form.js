@@ -122,7 +122,7 @@ return (
 
             <ul>
                 <li>
-                    <h3>Nº de commits</h3>
+                    <h3>Commits</h3>
                 </li>
                 {/* {commits.map(
                     (commit) =>
