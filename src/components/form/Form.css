@@ -25,6 +25,10 @@ input:focus{
     color: #fff;
     margin: 0 auto;
 }
+.pesquisar h3{
+    font-weight: 300;
+}
+
 .pesquisar button{
     padding: 10px;
     border: none;
@@ -74,6 +78,12 @@ input:focus{
     font-size: .8rem;
 }
 
+
+.logo{
+    display: block;
+    margin: 0 auto 50px;
+    width: 200px;
+}
 @media (max-width: 700px){
     .submit-form input{
         width: 300px;

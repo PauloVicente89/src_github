@@ -7,6 +7,10 @@ import { FaSearch } from 'react-icons/fa'
 // CSS DA PAGINA
 import './Form.css'
 
+import logo from '../../images/logo.png'
+
+import MenuListComposition from '../menu/Menu'
+
 
 // Main Function
 export default function Form() {
@@ -16,8 +20,9 @@ export default function Form() {
     const [commits , setCommit] = useState([]);
 
 
-
+    // REQUISIÇÃO DE REPOSITORIOS
     async function HandlerSearch () {
+        setRepositorios([])
         try {
           const res = await axios.get(`https://api.github.com/users/${user}/repos`)
          res.data.map((repo) => {
@@ -30,7 +35,7 @@ export default function Form() {
     }
     }
 
-
+    // REQUISIÇÃO DE BRANCHES
     async function GetBranches (nameRepo) {
         try {
             const res = await axios.get(`https://api.github.com/repos/${user}/${nameRepo}/branches`,{
@@ -46,7 +51,7 @@ export default function Form() {
             } 
     }
 
-    
+    // REQUISIÇÃO DE COMMITS
     async function GetCommit (nameBranch, repoName) {
         try {
             const res = await axios.get(`https://api.github.com/repos/${user}/${repoName}/commits`,{
@@ -57,12 +62,12 @@ export default function Form() {
                         {branch: nameBranch, 
                         commitMessage:commit.commit.message, 
                         nomeRepositorio: repoName}])
-                }), 
+                }),
                 )
                 
             } catch (error) {
                 console.error(error)
-            } 
+            }
     }
 
 
@@ -70,8 +75,8 @@ return (
     <>  
     {/* CONTAINER COM INPUT DE PESQUISA */}
         <div className='pesquisar'>
-
-            <h3>Usuário Github:</h3>
+            <img className='logo' src={logo}/>
+            <h3>Insira seu usuário Github:</h3>
 
             <div className='central'>
                 <input onChange={(e) => setUser(e.target.value)} />
@@ -91,20 +96,13 @@ return (
                 {/* LISTA DE REPOSITORIOS */}
                 {repositorios.map(
                     (repo) => {
-                        {branches.map(
-                            (branche) =>
-                            {console.log(commits)},
-                        )}
                         return(
                             // CRIANDO UMA LI A CADA REPOSITORIO
-                            <>
-                                <li className='nome-repo'>
-                                    <button type='button' id='searchBranche'>
-                                        {repo}
-                                    </button>
-                                </li>
-                            </>
-
+                            <li className='nome-repo'>
+                                <button type='button' id='searchBranche'>
+                                    {repo}
+                                </button>
+                            </li>
                         )
                     }
                 )}
@@ -112,13 +110,15 @@ return (
             </ul>
 
 
-
             <ul>
                 <li>
                     <h3>Branches</h3>
                 </li>
-                
+
+                {/* Lista para inserir os bracnhes */}
+                {/* <MenuListComposition  /> */}
             </ul>
+
 
             <ul>
                 <li>
